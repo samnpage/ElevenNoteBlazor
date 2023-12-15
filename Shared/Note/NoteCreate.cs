@@ -1,0 +1,13 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace ElevenNoteBlazor.Shared.Note;
+
+public class NoteCreate
+{
+    [Required]
+    public string Title { get; set; } = string.Empty;
+
+    [Required]
+    public string Content { get; set; } = string.Empty;
+    public int CategoryId { get; set; }
+}

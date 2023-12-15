@@ -1,5 +1,7 @@
 using ElevenNoteBlazor.Server.Data;
+using ElevenNoteBlazor.Server.Models;
 using ElevenNoteBlazor.Shared.Note;
+using Microsoft.EntityFrameworkCore;
 
 namespace ElevenNoteBlazor.Server.Services.Note;
 
@@ -17,15 +19,38 @@ public class NoteService : INoteService
     public void SetUserId(string userId) => _userId = userId;
 
     // Create
-    public Task<bool> CreateNoteAsync(NoteCreate model)
+    public async Task<bool> CreateNoteAsync(NoteCreate model)
     {
-        throw new NotImplementedException();
+        NoteEntity entity = new()
+        {
+            Title = model.Title,
+            Content = model.Content,
+            OwnerId = _userId,
+            CreatedUtc = DateTimeOffset.Now,
+            CategoryId = model.CategoryId
+        };
+
+        _context.Notes.Add(entity);
+        var numberOfChanges = await _context.SaveChangesAsync();
+
+        return numberOfChanges == 1;
     }
 
     // Read
-    public Task<IEnumerable<NoteListItem>> GetAllNotesAsync()
+    public async Task<IEnumerable<NoteListItem>> GetAllNotesAsync()
     {
-        throw new NotImplementedException();
+        var noteQuery = _context.Notes
+            .Where(n => n.OwnerId == _userId)
+            .Select(n =>
+            new NoteListItem
+            {
+                Id = n.Id,
+                Title = n.Title,
+                CategoryName = n.Category.Name,
+                CreatedUtc = n.CreatedUtc
+            });
+
+        return await noteQuery.ToListAsync();
     }
 
     public Task<NoteDetail> GetNoteByIdAsync(int noteId)

@@ -53,21 +53,55 @@ public class NoteService : INoteService
         return await noteQuery.ToListAsync();
     }
 
-    public Task<NoteDetail> GetNoteByIdAsync(int noteId)
+    public async Task<NoteDetail> GetNoteByIdAsync(int noteId)
     {
-        throw new NotImplementedException();
+        var noteEntity = await _context.Notes
+            .Include(nameof(CategoryEntity))
+            .FirstOrDefaultAsync(n => n.Id == noteId && n.OwnerId == _userId);
+        if (noteEntity is null)
+            return null;
+
+        NoteDetail detail = new()
+        {
+            Id = noteEntity.Id,
+            Title = noteEntity.Title,
+            Content = noteEntity.Content,
+            CreatedUtc = noteEntity.CreatedUtc,
+            ModifiedUtc = noteEntity.ModifiedUtc,
+            CategoryName = noteEntity.Category.Name,
+            CategoryId = noteEntity.Category.Id
+        };
+
+        return detail;
     }
 
     // Update
-    public Task<bool> UpdateNoteAsync(NoteEdit model)
+    public async Task<bool> UpdateNoteAsync(NoteEdit model)
     {
-        throw new NotImplementedException();
+        if (model == null)
+            return false;
+
+        var entity = await _context.Notes.FindAsync(model.Id);
+        if (entity?.OwnerId != _userId)
+            return false;
+
+        entity.Title = model.Title;
+        entity.Content = model.Content;
+        entity.CategoryId = model.CategoryId;
+        entity.ModifiedUtc = DateTimeOffset.Now;
+
+        return await _context.SaveChangesAsync() == 1;
     }
 
     // Delete
-    public Task<bool> DeleteNoteAsync(int noteId)
+    public async Task<bool> DeleteNoteAsync(int noteId)
     {
-        throw new NotImplementedException();
+        var entity = await _context.Notes.FindAsync(noteId);
+        if(entity?.OwnerId != _userId)
+            return false;
+
+        _context.Notes.Remove(entity);
+        return await _context.SaveChangesAsync() == 1;
     }
 
     public Task<bool> DeleteNoteAsync(string userId)

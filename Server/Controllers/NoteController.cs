@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using ElevenNoteBlazor.Server.Services.Note;
-using ElevenNoteBlazor.Shared.Note;
+using ElevenNoteBlazor.Shared.Models.Note;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers;

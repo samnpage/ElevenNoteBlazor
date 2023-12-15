@@ -1,4 +1,4 @@
-using ElevenNoteBlazor.Shared.Note;
+using ElevenNoteBlazor.Shared.Models.Note;
 
 namespace ElevenNoteBlazor.Server.Services.Note;
 

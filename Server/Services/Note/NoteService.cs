@@ -1,6 +1,6 @@
 using ElevenNoteBlazor.Server.Data;
 using ElevenNoteBlazor.Server.Models;
-using ElevenNoteBlazor.Shared.Note;
+using ElevenNoteBlazor.Shared.Models.Note;
 using Microsoft.EntityFrameworkCore;
 
 namespace ElevenNoteBlazor.Server.Services.Note;

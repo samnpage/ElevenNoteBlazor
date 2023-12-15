@@ -1,4 +1,4 @@
-using ElevenNoteBlazor.Shared.Category;
+using ElevenNoteBlazor.Shared.Models.Category;
 
 namespace ElevenNoteBlazor.Server.Services.Category;
 

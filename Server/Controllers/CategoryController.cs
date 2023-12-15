@@ -1,5 +1,5 @@
 using ElevenNoteBlazor.Server.Services.Category;
-using ElevenNoteBlazor.Shared.Category;
+using ElevenNoteBlazor.Shared.Models.Category;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers;
